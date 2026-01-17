@@ -45,7 +45,7 @@ services:
   # EVOLUTION API V2
   # ----------------------------------------------------------------
   evolution_api:
-    image: atendai/evolution-api:v2.1.1
+    image: atendai/evolution-api:v2.2.3
     container_name: evolution_api
     restart: always
     ports:
@@ -57,14 +57,16 @@ services:
       
       # Banco de Dados
       - DATABASE_ENABLED=true
-      - DATABASE_CONNECTION_URI=postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres:5432/evolution
-      - DATABASE_CLIENT_NAME=evolution_exchange
+      - DATABASE_PROVIDER=postgresql
+      - DATABASE_CONNECTION_URI=postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres:5432/evolution?schema=public
+      - DATABASE_CONNECTION_CLIENT_NAME=evolution_exchange
       
-      # Redis
-      - REDIS_ENABLED=true
-      - REDIS_URI=redis://redis:6379/0
-      - REDIS_PREFIX_KEY=evolution
+      # Redis Cache
       - CACHE_REDIS_ENABLED=true
+      - CACHE_REDIS_URI=redis://redis:6379/0
+      - CACHE_REDIS_PREFIX_KEY=evolution
+      - CACHE_REDIS_SAVE_INSTANCES=false
+      - CACHE_LOCAL_ENABLED=false
       
       # Auth
       - AUTHENTICATION_API_KEY=${EVOLUTION_API_KEY}
